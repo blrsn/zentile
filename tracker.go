@@ -108,14 +108,20 @@ func (tr *tracker) handleDesktopChange(c *Client) {
 	newDesk, _ := ewmh.WmDesktopGet(state.X, c.window.Id)
 	oldDesk := c.Desk
 
+	// Remove client window from old desktop
 	tr.workspaces[oldDesk].RemoveClient(*c)
-	tr.workspaces[newDesk].AddClient(*c)
-
-	c.Desk = newDesk
 	if tr.workspaces[oldDesk].IsTiling {
 		tr.workspaces[oldDesk].Tile()
 	}
 
+	// Ignore "Always On Visible Workspace" windows on desktop 4294967295 (max uint32)
+	if newDesk > state.DeskCount {
+		return
+	}
+	c.Desk = newDesk
+
+	// Add client window to new desktop
+	tr.workspaces[newDesk].AddClient(*c)
 	if tr.workspaces[newDesk].IsTiling {
 		tr.workspaces[newDesk].Tile()
 	} else {
