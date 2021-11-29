@@ -67,6 +67,9 @@ func (st *Store) DecreaseMaster() {
 }
 
 func (st *Store) MakeMaster(c Client) {
+	if c.window == nil {
+		return
+	}
 	for i, slave := range st.slaves {
 		if slave.window.Id == c.window.Id {
 			st.masters[0], st.slaves[i] = st.slaves[i], st.masters[0]
