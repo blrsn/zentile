@@ -38,6 +38,11 @@ func createLayouts(workspaceNum uint) []Layout {
 			Proportion:   0.5,
 			WorkspaceNum: workspaceNum,
 		}},
+		&SquareLayout{&VertHorz{
+			Store:        buildStore(),
+			Proportion:   0.5,
+			WorkspaceNum: workspaceNum,
+		}},
 		&FullScreen{
 			Store:        buildStore(),
 			WorkspaceNum: workspaceNum,
