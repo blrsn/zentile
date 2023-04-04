@@ -18,6 +18,9 @@ type cfg struct {
 	Gap             int
 	Proportion      float64
 	HideDecor       bool `toml:"remove_decorations"`
+	SqCeiling       int  `toml:"squareLayout_ceiling"`
+	SqHeight        int  `toml:"squareLayout_height"`
+	DefaultLayout   uint `toml:"default_layout"`
 }
 
 func init() {
@@ -56,7 +59,16 @@ func configFilePath() string {
 	return filepath.Join(configFolderPath(), "config.toml")
 }
 
-var defaultConfig = `# Window decorations will be removed when tiling if set to true
+var defaultConfig = `## General Config
+
+# Startup Layout - preferred layout to begin with
+# 0 - Vertical
+# 1 - Horizontal
+# 2 - Square
+# 3 - Full Screen
+default_layout = 0
+
+# Window decorations will be removed when tiling if set to true
 remove_decorations = false
 
 # Zentile will ignore windows added to this list.
@@ -69,6 +81,17 @@ gap = 5
 
 # How much to increment the master area size.
 proportion = 0.1
+
+
+## Square Layout Config
+# Useful in some multi-monitor setups
+
+# Vertical offset - top limit.  Windows will not be placed above this line
+squareLayout_ceiling = 0
+
+# Layout height - lower limit; distance from ceiling (0 for automatic)
+squareLayout_height = 0
+
 
 [keybindings]
 # key sequences can have zero or more modifiers and exactly one key.

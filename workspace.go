@@ -40,7 +40,6 @@ func createLayouts(workspaceNum uint) []Layout {
 		}},
 		&SquareLayout{&VertHorz{
 			Store:        buildStore(),
-			Proportion:   0.5,
 			WorkspaceNum: workspaceNum,
 		}},
 		&FullScreen{
