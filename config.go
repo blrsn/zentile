@@ -17,10 +17,9 @@ type cfg struct {
 	WindowsToIgnore []string `toml:"ignore"`
 	Gap             int
 	Proportion      float64
-	HideDecor       bool `toml:"remove_decorations"`
-	SqCeiling       int  `toml:"squareLayout_ceiling"`
-	SqHeight        int  `toml:"squareLayout_height"`
-	DefaultLayout   uint `toml:"default_layout"`
+	HideDecor       bool     `toml:"remove_decorations"`
+	MMRegions       [][4]int `toml:"multi_region_geometry"`
+	DefaultLayout   uint     `toml:"default_layout"`
 }
 
 func init() {
@@ -84,13 +83,23 @@ proportion = 0.1
 
 
 ## Square Layout Config
-# Useful in some multi-monitor setups
+# Multiple Monitor Support (optional)
+#
+# You can use this to describe one or more areas where you want windows to be
+# handled separately.  This is most commonly because you have multiple monitors
+# displaying portions of, but not the full, workarea dimensions.
+# 
+# This is a list of region descriptions in the form (x, y, width, height)
+# where x and y represent the Top-Left corner of the region within the workarea
+# 
+# Here is an example with two monitors: one portrait and one landscape, with the
+# landscape display at a vertical offset of 630 pixels and to the right edge of the
+# portrait display
 
-# Vertical offset - top limit.  Windows will not be placed above this line
-squareLayout_ceiling = 0
-
-# Layout height - lower limit; distance from ceiling (0 for automatic)
-squareLayout_height = 0
+# multi_region_geometry = [
+#	[0, 0, 1080, 1920],
+#	[1080, 630, 1920, 1080]
+#]
 
 
 [keybindings]
