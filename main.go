@@ -17,14 +17,15 @@ func main() {
 
 	startups := Config.TileStartup
 	for i := 0; i < len(startups); i += 1 {
-		ws := startups[i]
-		if ws >= len(t.workspaces) {
-			log.Warn("Invalid workspace number in tile_workspaces: ", ws)
+		wn := startups[i]
+		ws := t.workspaces[uint(wn)]
+		if wn >= len(t.workspaces) {
+			log.Warn("Invalid workspace number in tile_workspaces: ", wn)
 			continue
 		}
 
-		t.workspaces[uint(ws)].IsTiling = true
-		t.workspaces[uint(ws)].Tile()
+		ws.IsTiling = true
+		ws.Tile()
 	}
 
 	// Run X event loop
