@@ -29,9 +29,12 @@ $ ./zentile-linux-amd64
 Or compile from source
 
 ```
+$ git clone https://github.com/blrsn/zentile
 $ go get -u github.com/blrsn/zentile
 $ go install github.com/blrsn/zentile
 ```
+note: go install will put the binary in ~/go/bin by default
+This is not guaranteed to already be in your $PATH
 
 #### Arch Linux
 
