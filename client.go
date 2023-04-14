@@ -116,7 +116,7 @@ func (c Client) Restore() {
 	c.MoveResize(geom.X(), geom.Y(), geom.Width(), geom.Height())
 }
 
-//  Activate makes the client the currently active window
+// Activate makes the client the currently active window
 func (c Client) Activate() {
 	ewmh.ActiveWindowReq(state.X, c.window.Id)
 }
@@ -148,6 +148,7 @@ func shouldIgnore(w xproto.Window) bool {
 	c, err := icccm.WmClassGet(state.X, w)
 	if err != nil {
 		log.Warn(err)
+		return true // c is nil and can't be used below
 	}
 
 	for _, s := range Config.WindowsToIgnore {
