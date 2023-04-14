@@ -30,8 +30,9 @@ Or compile from source
 
 ```
 $ git clone https://github.com/blrsn/zentile
+$ cd zentile
 $ go get -u github.com/blrsn/zentile
-$ go install github.com/blrsn/zentile
+$ go install
 ```
 note: go install will put the binary in ~/go/bin by default
 This is not guaranteed to already be in your $PATH
