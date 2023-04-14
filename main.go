@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
+	"os"
 
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/blrsn/zentile/state"
@@ -30,6 +32,20 @@ func main() {
 
 	// Run X event loop
 	xevent.Main(state.X)
+}
+
+func generateStatus(t *tracker) {
+	fname := Config.StatusFname
+	if fname == "" {
+		return
+	}
+
+	blob, _ := json.MarshalIndent(t.workspaces, "", "    ")
+	os.Create(fname)
+	err := os.WriteFile(fname, blob, 0600)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func setLogLevel() {
