@@ -17,7 +17,8 @@ type cfg struct {
 	WindowsToIgnore []string `toml:"ignore"`
 	Gap             int
 	Proportion      float64
-	HideDecor       bool `toml:"remove_decorations"`
+	HideDecor       bool  `toml:"remove_decorations"`
+	TileStartup     []int `toml:"tile_workspaces"`
 }
 
 func init() {
@@ -69,6 +70,10 @@ gap = 5
 
 # How much to increment the master area size.
 proportion = 0.1
+
+# tile on startup (optional)
+# list of workspace numbers to activate tiling for at startup
+# tile_workspaces = [0, 1, 3]
 
 [keybindings]
 # key sequences can have zero or more modifiers and exactly one key.
