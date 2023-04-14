@@ -1,6 +1,9 @@
 package main
 
 import (
+	"encoding/json"
+	"os"
+
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
@@ -22,19 +25,36 @@ func (k keyMapper) bind(action string, f func()) {
 	}
 }
 
+func generateStatus(t *tracker) {
+	fname := Config.StatusFname
+	if fname == "" {
+		return
+	}
+
+	blob, _ := json.MarshalIndent(t.workspaces, "", "    ")
+	os.Create(fname)
+	err := os.WriteFile(fname, blob, 0600)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func bindKeys(t *tracker) {
 	workspaces := t.workspaces
 	keybind.Initialize(state.X)
 	k := keyMapper{}
+	generateStatus(t)
 
 	k.bind("tile", func() {
 		ws := workspaces[state.CurrentDesk]
 		ws.IsTiling = true
 		ws.Tile()
+		generateStatus(t)
 	})
 	k.bind("untile", func() {
 		ws := workspaces[state.CurrentDesk]
 		ws.Untile()
+		generateStatus(t)
 	})
 	k.bind("make_active_window_master", func() {
 		c := t.clients[state.ActiveWin]

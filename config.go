@@ -18,8 +18,9 @@ type cfg struct {
 	WindowsToIgnore []string `toml:"ignore"`
 	Gap             int
 	Proportion      float64
-	HideDecor       bool  `toml:"remove_decorations"`
-	TileStartup     []int `toml:"tile_workspaces"`
+	TileStartup     []int  `toml:"tile_workspaces"`
+	HideDecor       bool   `toml:"remove_decorations"`
+	StatusFname     string `toml:"status_filename"`
 }
 
 func init() {
@@ -77,6 +78,10 @@ proportion = 0.1
 # tile on startup (optional)
 # list of workspace numbers to activate tiling for at startup
 # tile_workspaces = [0, 1, 3]
+
+# write out tiling status as it changes (optional)
+# use the full path to the file
+# status_filename = "/full/path/to/file"
 
 [keybindings]
 # key sequences can have zero or more modifiers and exactly one key.
