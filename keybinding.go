@@ -1,9 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"os"
-
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
@@ -22,20 +19,6 @@ func (k keyMapper) bind(action string, f func()) {
 
 	if err != nil {
 		log.Warn(err)
-	}
-}
-
-func generateStatus(t *tracker) {
-	fname := Config.StatusFname
-	if fname == "" {
-		return
-	}
-
-	blob, _ := json.MarshalIndent(t.workspaces, "", "    ")
-	os.Create(fname)
-	err := os.WriteFile(fname, blob, 0600)
-	if err != nil {
-		log.Fatal(err)
 	}
 }
 
