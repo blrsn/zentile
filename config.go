@@ -8,6 +8,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/mitchellh/go-homedir"
+	log "github.com/sirupsen/logrus"
 )
 
 var Config cfg
@@ -23,7 +24,9 @@ type cfg struct {
 
 func init() {
 	writeDefaultConfig()
-	toml.DecodeFile(configFilePath(), &Config)
+	configFName := configFilePath()
+	log.Info("Loading config from ", configFName)
+	toml.DecodeFile(configFName, &Config)
 }
 
 func writeDefaultConfig() {
