@@ -151,16 +151,26 @@ func (l *SquareLayout) Do() {
 			continue
 		}
 		cols := int(math.Floor(math.Sqrt(float64(csize))))
+		rows := cols // default to perfect square
 
 		// cols^2 + 2*cols + 1 === (cols + 1)^2
-		extraRows := int(math.Ceil(float64(csize)/float64(cols))) - cols // 0..2
+		extras := int(math.Ceil(float64(csize)/float64(cols))) - cols // 0..2
 
-		rows := cols // default to perfect square
-		if extraRows > 0 {
-			rows = rows + 1
+		// if taller than wide, add additional rows first
+		// if wider than tall, add additional columns first
+		if extras > 0 {
+			if rh >= rw {
+				rows = rows + 1
+			} else {
+				cols = cols + 1
+			}
 		}
-		if extraRows == 2 {
-			cols = cols + 1
+		if extras == 2 {
+			if rh >= rw {
+				cols = cols + 1
+			} else {
+				rows = rows + 1
+			}
 		}
 
 		colsize := rw/cols - gap
@@ -169,21 +179,25 @@ func (l *SquareLayout) Do() {
 		padx := 0
 		pady := 0
 
-		if rowsize < colsize && cols > 1 {
-			padx = (colsize - rowsize) * cols / (cols - 1)
-			colsize = rowsize
-			for padx > colsize {
-				colsize = colsize * 3 / 2
-				padx = (rw - colsize*cols) / (cols - 1)
-			}
-		} else if rowsize > colsize && rows > 1 {
-			pady = (rowsize - colsize) * rows / (rows - 1)
-			rowsize = colsize
-			for pady > rowsize {
-				rowsize = rowsize * 3 / 2
-				pady = (rh - rowsize*rows) / (rows - 1)
-			}
-		}
+		// here is an algo for auto-padding (gap becomes minimum pad)
+		// i ended up not liking it and figured it would add too
+		// much complexity to the config, but here it is...
+
+		// if rowsize < colsize && cols > 1 {
+		// 	padx = (colsize - rowsize) * cols / (cols - 1)
+		// 	colsize = rowsize
+		// 	for padx > colsize {
+		// 		colsize = colsize * 3 / 2
+		// 		padx = (rw - colsize*cols) / (cols - 1)
+		// 	}
+		// } else if rowsize > colsize && rows > 1 {
+		// 	pady = (rowsize - colsize) * rows / (rows - 1)
+		// 	rowsize = colsize
+		// 	for pady > rowsize {
+		// 		rowsize = rowsize * 3 / 2
+		// 		pady = (rh - rowsize*rows) / (rows - 1)
+		// 	}
+		// }
 
 		mx := rx
 		my := ry
