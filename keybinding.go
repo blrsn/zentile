@@ -42,6 +42,12 @@ func bindKeys(t *tracker) {
 		ws.ActiveLayout().MakeMaster(c)
 		ws.Tile()
 	})
+	k.bind("unmake_active_window_master", func() {
+		c := t.clients[state.ActiveWin]
+		ws := workspaces[state.CurrentDesk]
+		ws.ActiveLayout().DemoteWindow(c)
+		ws.Tile()
+	})
 	k.bind("switch_layout", func() {
 		workspaces[state.CurrentDesk].SwitchLayout()
 	})

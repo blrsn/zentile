@@ -11,6 +11,7 @@ type Layout interface {
 	Add(c Client)
 	Remove(c Client)
 	MakeMaster(c Client)
+	DemoteWindow(c Client)
 	IncMaster()
 	DecreaseMaster()
 	NextClient()

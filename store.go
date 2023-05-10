@@ -74,6 +74,50 @@ func (st *Store) MakeMaster(c Client) {
 	}
 }
 
+func (st *Store) DemoteWindow(c Client) {
+	// this is intended to be the functional inverse of MakeMaster above
+	// instead of swapping to the front of the list, we are swapping to the end
+	// one diff is we are iterating over all windows not just the masters slice
+	slen := len(st.slaves)
+	if slen > 0 && st.slaves[slen-1].window.Id == c.window.Id {
+		// Demoting the last client promotes it
+		s := st.slaves[slen-1]
+		mlen := len(st.masters)
+		if mlen == 0 {
+			st.masters = []Client{s}
+			st.slaves = st.slaves[:slen-1]
+		} else {
+			st.masters[0], st.slaves[slen-1] = st.slaves[slen-1], st.masters[0]
+		}
+		return
+	}
+
+	for i, master := range st.masters {
+		if master.window.Id == c.window.Id {
+			if slen > 0 {
+				st.slaves[slen-1], st.masters[i] = st.masters[i], st.slaves[slen-1]
+			} else {
+				st.slaves = []Client{st.masters[i]}
+				st.masters = append(st.masters[:i], st.masters[i+1:]...)
+			}
+			return
+		}
+	}
+
+	if slen < 2 {
+		return
+	}
+
+	for i, slave := range st.slaves {
+		if slave.window.Id == c.window.Id {
+			client := slave
+			st.slaves = append(st.slaves[:i], st.slaves[i+1:]...)
+			st.slaves = append(st.slaves, client)
+			return
+		}
+	}
+}
+
 func (st *Store) All() []Client {
 	return append(st.masters, st.slaves...)
 }
