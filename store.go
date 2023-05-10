@@ -110,9 +110,7 @@ func (st *Store) DemoteWindow(c Client) {
 
 	for i, slave := range st.slaves {
 		if slave.window.Id == c.window.Id {
-			client := slave
-			st.slaves = append(st.slaves[:i], st.slaves[i+1:]...)
-			st.slaves = append(st.slaves, client)
+			st.slaves[i], st.slaves[slen-1] = st.slaves[slen-1], st.slaves[i]
 			return
 		}
 	}
