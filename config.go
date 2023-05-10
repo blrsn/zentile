@@ -98,6 +98,9 @@ untile = "Control-Shift-u"
 # Make the active window as master.
 make_active_window_master = "Control-Shift-m"
 
+# Demote the active window
+demote_active_window = "Control-Shift-x"
+
 # Increase the number of masters.
 increase_master = "Control-Shift-i"
 
