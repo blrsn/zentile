@@ -67,9 +67,28 @@ func (st *Store) DecreaseMaster() {
 }
 
 func (st *Store) MakeMaster(c Client) {
+	if len(st.masters) > 0 && st.masters[0].window.Id == c.window.Id {
+		// Mastering the first master demotes it
+		s := st.masters[0]
+		slen := len(st.slaves)
+		if slen == 0 {
+			st.slaves = []Client{s}
+			st.masters = st.masters[1:]
+		} else {
+			st.masters[0], st.slaves[slen-1] = st.slaves[slen-1], st.masters[0]
+		}
+		return
+	}
+
 	for i, slave := range st.slaves {
 		if slave.window.Id == c.window.Id {
-			st.masters[0], st.slaves[i] = st.slaves[i], st.masters[0]
+			if len(st.masters) > 0 {
+				st.masters[0], st.slaves[i] = st.slaves[i], st.masters[0]
+			} else {
+				st.masters = []Client{st.slaves[i]}
+				st.slaves = append(st.slaves[:i], st.slaves[i+1:]...)
+			}
+			break
 		}
 	}
 }

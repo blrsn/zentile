@@ -93,5 +93,6 @@ func WorkAreaDimensions(num uint) (x, y, width, height int) {
 	y = w.Y
 	width = int(w.Width)
 	height = int(w.Height)
+	// log.Info("workArea ", num, " - X: ", x, " Y: ", y, " W: ", width, " H: ", height)
 	return
 }

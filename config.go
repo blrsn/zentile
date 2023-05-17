@@ -17,7 +17,9 @@ type cfg struct {
 	WindowsToIgnore []string `toml:"ignore"`
 	Gap             int
 	Proportion      float64
-	HideDecor       bool `toml:"remove_decorations"`
+	HideDecor       bool     `toml:"remove_decorations"`
+	MMRegions       [][4]int `toml:"multi_region_geometry"`
+	DefaultLayout   uint     `toml:"default_layout"`
 }
 
 func init() {
@@ -56,7 +58,16 @@ func configFilePath() string {
 	return filepath.Join(configFolderPath(), "config.toml")
 }
 
-var defaultConfig = `# Window decorations will be removed when tiling if set to true
+var defaultConfig = `## General Config
+
+# Startup Layout - preferred layout to begin with
+# 0 - Vertical
+# 1 - Horizontal
+# 2 - Square
+# 3 - Full Screen
+default_layout = 0
+
+# Window decorations will be removed when tiling if set to true
 remove_decorations = false
 
 # Zentile will ignore windows added to this list.
@@ -69,6 +80,27 @@ gap = 5
 
 # How much to increment the master area size.
 proportion = 0.1
+
+
+## Square Layout Config
+# Multiple Monitor Support (optional)
+#
+# You can use this to describe one or more areas where you want windows to be
+# handled separately.  This is most commonly because you have multiple monitors
+# displaying portions of, but not the full, workarea dimensions.
+# 
+# This is a list of region descriptions in the form (x, y, width, height)
+# where x and y represent the Top-Left corner of the region within the workarea
+# 
+# Here is an example with two monitors: one portrait and one landscape, with the
+# landscape display at a vertical offset of 630 pixels and to the right edge of the
+# portrait display
+
+# multi_region_geometry = [
+#	[0, 0, 1080, 1920],
+#	[1080, 630, 1920, 1080]
+#]
+
 
 [keybindings]
 # key sequences can have zero or more modifiers and exactly one key.

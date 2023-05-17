@@ -29,6 +29,9 @@ func bindKeys(t *tracker) {
 
 	k.bind("tile", func() {
 		ws := workspaces[state.CurrentDesk]
+		if !ws.IsTiling {
+			ws.activeLayoutNum = Config.DefaultLayout % uint(len(ws.layouts))
+		}
 		ws.IsTiling = true
 		ws.Tile()
 	})
